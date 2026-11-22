@@ -9,19 +9,20 @@
 
 **Build and Run**
 
-- Open the Tamagotchi project in Apache NetBeans.
-- Confirm that the package declaration in all three files is com.mycompany.finals.
-- Confirm that FINALS.java, Game.java, Creature.java, DatabaseConnection.java, and BackgroundPanel.java are in the matching package folder.
-- Place the pet/expression images and background image in the resources/images folder using the exact filenames expected by the code.
-- Clean and Build the project in NetBeans.
-- Run FINALS.java (the class containing public static void main).
-- Choose a species, enter a name, and test the Play, Eat, Sleep, and Quit buttons.
+- Open the FINALS Maven project in Apache NetBeans.
+- Make sure the Java files are under com.mycompany.finals.
+- Ensure the pet and background images are in src/main/resources/images/.
+- Check the Oracle database connection settings in DatabaseConnection.java.
+- Select Clean and Build.
+- Run FINALS.java to open the Main Menu.
+- Choose a pet, enter a name, and test the Play, Eat, Sleep, and Quit buttons.
 
-# User guide
+**User Guide**
 
-- Launch the application.
-- A message will appear asking you to choose a pet species such as Cat, Dog, or Fox.
-- Enter your desired pet name.
-- If the name is left blank, the program automatically assigns the name Pawgotchi.
-- The system checks whether a pet with the entered name already exists. If there's already an existing name, its saved information will be loaded otherwise, a new pet will be created.
-- Once the pet is loaded or created, the main game window will appear, displaying the pet's name, species, and current Hunger, Happiness, and Energy levels. Each stat starts at 15 for a newly created pet and updates whenever the user performs an action.
+- Launch the application to open the Main Menu.
+- Select Start / Load Pet.
+- Choose a pet species: Cat, Dog, or Fox.
+- Enter a pet name. Blank names and names containing special characters are not accepted. Names must contain letters only and have a maximum of 20 characters.
+- The system checks for an existing pet with the same name. If found, its saved information is loaded otherwise, a new pet is created.
+- The game window displays the pet's name, species, Hunger, Happiness, and Energy. Newly created pets start with all three stats at 15.
+- Use Play, Eat, and Sleep to interact with your pet and update its stats.
