@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class DatabaseConnection {
     // Update URL, username, and password to match your Oracle setup
     private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:XE";
     private static final String DB_USER = "system";
-    private static final String DB_PASSWORD = "Password";
+    private static final String DB_PASSWORD = "cjaleck0717";
 
     public record SavedPetSummary(
             int petId,
@@ -23,11 +22,8 @@ public class DatabaseConnection {
             int hunger,
             int happiness,
             int energy
-    ) { }
+    ){}
 
-    private DatabaseConnection() {
-        // Utility class
-    }
 
     public static Connection connect() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
