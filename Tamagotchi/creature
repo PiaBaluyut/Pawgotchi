@@ -77,7 +77,6 @@ public class Creature {
     }
     
     public boolean isDead() {
-        // Example: If energy or happiness drops to 0 or below, or hunger goes too high (e.g., 100)
         
     return energy <= 0 || happiness <= 0 || hunger <=0;
 }
