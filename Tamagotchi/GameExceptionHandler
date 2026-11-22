@@ -1,1 +1,54 @@
+package com.mycompany.finals;
 
+import java.awt.Component;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
+
+public final class GameExceptionHandler {
+
+    private GameExceptionHandler() {
+    }
+
+    public static void handleStartupError(Component parent, SQLException e) {
+        JOptionPane.showMessageDialog(
+                parent,
+                "Database Error: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        System.exit(1);
+    }
+
+    public static void handleSavedPetsError(Component parent, SQLException ex) {
+        JOptionPane.showMessageDialog(
+                parent,
+                "Unable to load saved pets: " + ex.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    public static void handleSaveError(Component parent, SQLException e) {
+        JOptionPane.showMessageDialog(
+                parent,
+                "Unable to save game data: " + e.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    public static void handleDeleteError(Component parent, SQLException e) {
+        JOptionPane.showMessageDialog(
+                parent,
+                "Unable to delete dead pet: " + e.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
+
+    public static void ignoreDatabaseError(SQLException e) {
+        //ignores minor database errors.
+    }
+}
