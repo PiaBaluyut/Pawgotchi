@@ -85,12 +85,7 @@ public class MainMenu extends JFrame {
     try {
         pets = DatabaseConnection.getAllCreatures();
     } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Unable to load saved pets: " + ex.getMessage(),
-                "Database Error",
-                JOptionPane.ERROR_MESSAGE
-        );
+        GameExceptionHandler.handleSavedPetsError(this, ex);
         return;
     }
 
