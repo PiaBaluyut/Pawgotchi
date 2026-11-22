@@ -1,7 +1,8 @@
 # Setup guide (README)
 
 **PAWGOTCHI**
-Pawgotchi is a virtual pet game where players can adopt and name their own Cat, Dog, or Fox. Players can take care of their pets through three main actions such as Play, Eat, and Sleep. The game also displays the pet's current hunger, happiness, and energy levels, changes its appearance depending on its condition, and records every action in the status log.
+
+- Pawgotchi is a virtual pet game where players can adopt and name their own Cat, Dog, or Fox. Players can take care of their pets through three main actions such as Play, Eat, and Sleep. The game also displays the pet's current hunger, happiness, and energy levels, changes its appearance depending on its condition, and records every action in the status log.
 
 **Prerequisites**
 
