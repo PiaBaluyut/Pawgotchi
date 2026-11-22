@@ -1,24 +1,14 @@
+
 package com.mycompany.finals;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.BorderLayout;
 
-public class Game extends JFrame {
-    private Creature creature;
-
-    // UI Components
-    private  JLabel statusLabel;
-    private  JLabel petImageLabel;
-    private JTextArea logTextArea;
-    private JButton playButton, eatButton, sleepButton, quitButton;
-    private Connection conn;
-    private int petId;
-
+public class Game extends GameActions {
     public Game() {
         setTitle("Pawgotchi - Tamagotchi Game");
         setSize(500, 600);
@@ -117,7 +107,7 @@ if (name == null) {
 }
 
         // Connect to database
-try {
+   try {
 
     conn = DatabaseConnection.connect();
 
@@ -172,14 +162,7 @@ try {
 
 } catch (SQLException e) {
 
-    JOptionPane.showMessageDialog(
-            this,
-            "Database Error: " + e.getMessage(),
-            "Error",
-            JOptionPane.ERROR_MESSAGE
-    );
-
-    System.exit(1);
+    GameExceptionHandler.handleStartupError(this, e);
 }
         
         // TOP PANEL: Status
@@ -269,226 +252,5 @@ try {
 
         // Show Initial Pet Image
         updatePetImage(0);
-    }
-    private void appendLog(String text) {
-    logTextArea.append(text);
-    logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
-}
-
-    // Update Pet Image Based on Expression
-    private void updatePetImage(int lastAction) {
-
-    String expression;
-    String expressionMessage = "";
-
-    // Check the pet's current condition
-    if (creature.getEnergy() <= 4) {
-        expression = "sleepy";
-        expressionMessage = creature.getName() + " is feeling sleepy! It needs some rest."; 
-    }
-
-    else if (creature.getHunger() <= 4) {
-        expression = "hungry";
-        expressionMessage = creature.getName() + " is hungry! Please feed it!"; 
-    }
-    
-   else if (creature.getHappiness() <= 4) {
-        expression = "sad";
-        expressionMessage = creature.getName() + " is feeling sad! Play with it to cheer it up."; 
-   } 
-    
-    else if (lastAction == 3) {
-        expression = "sleep"; 
-    }
-      
-    else if (lastAction == 2) {
-        expression = "eat"; 
-    }
-     
-    else {
-        expression = "happy";
-        expressionMessage = creature.getName() + " is feeling happy!";
-    }
-
-    // Display message in Activity Log
-    appendLog(expressionMessage + "\n");
-
-    // Save message in SQL Database
-    try {
-
-        DatabaseConnection.createMessage(
-                conn,
-                petId,
-                expressionMessage,
-                expression.toUpperCase()
-        );
-
-    } catch (SQLException e) {
-    }
-
-    // Get Selected Animal
-    String animal = creature.getSpecies();
-
-    // Find Correct Imagemessage = creature.getName() + " had fun playing!";
-    String imagePath = "/images/" + animal + "_" + expression + ".png";
-
-    java.net.URL imageURL = getClass().getResource(imagePath);
-
-    if (imageURL != null) {
-
-        ImageIcon originalIcon = new ImageIcon(imageURL);
-
-        Image scaledImage = originalIcon.getImage().getScaledInstance(
-            250, 250, Image.SCALE_SMOOTH
-        );
-
-        petImageLabel.setIcon(new ImageIcon(scaledImage));
-        petImageLabel.setText("");
-
-    } else {
-
-        petImageLabel.setIcon(null);
-        petImageLabel.setText(
-            "Image not found: " + imagePath
-        );
-    }
-}
-
-    
-private void handleAction(int choice) {
-
-    if (creature.isDead()) {
-        return;
-    }
-
-    String message = "";
-    String activityType = "";
-
-    switch (choice) {
-
-        case 1 -> {
-            creature.play();
-            message = creature.getName() + " had fun playing!";
-            activityType = "PLAY";
-            
-            }
-
-        case 2 -> {
-            creature.eat();
-            message = creature.getName()
-                    + " enjoyed a delicious meal!";
-            activityType = "EAT";
-            }
-
-        case 3 -> {
-            creature.sleep();
-            message = creature.getName()
-                    + " took a nice cozy nap.";
-            activityType = "SLEEP";
-            }
-
-        case 4 -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Awh. Time to put " + creature.getName()
-                            + " to sleep :("
-            );
-            
-            try {
-                if (conn != null && !conn.isClosed()) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-            }
-            
-            dispose();
-            System.exit(0);
-            return; }
-    }
-
-    // Save updated creature stats and activity
-    try {
-
-        DatabaseConnection.updateCreature(
-                conn,
-                petId,
-                creature.getHunger(),
-                creature.getHappiness(),
-                creature.getEnergy()
-        );
-
-        DatabaseConnection.createActivity(
-                conn,
-                petId,
-                activityType
-        );
-
-        DatabaseConnection.createMessage(
-                conn,
-                petId,
-                message,
-                activityType
-        );
-
-    } catch (SQLException e) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Unable to save game data: " + e.getMessage(),
-                "Database Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-    }
-
-    // Update Game Log and Status
-    appendLog(message + "\n");
-    statusLabel.setText(creature.Status());
-
-    // Update Pet Expression
-    updatePetImage(choice);
-
-    // Check If Creature Died
-    if (creature.isDead()) {
-
-        String deathMsg = creature.getDeathReason();
-
-        appendLog("\n[R.I.P.] " + deathMsg + "\n");
-        
-        JOptionPane.showMessageDialog(
-                this,
-                deathMsg,
-                "Game Over",
-                JOptionPane.ERROR_MESSAGE
-            );
-
-            playButton.setEnabled(false);
-            eatButton.setEnabled(false);
-            sleepButton.setEnabled(false);
-
-            quitButton.setText("Your pet is dead");
-        
-        // Save death message
-        try {
-
-    DatabaseConnection.createMessage(
-            conn, petId, deathMsg, "DEATH"
-    );
-
-    DatabaseConnection.deleteCreature(conn, petId);
-
-    System.out.println(
-            "[DELETE] Dead pet and its records have been removed."
-    );
-
-} catch (SQLException e) {
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Unable to delete dead pet: " + e.getMessage(),
-            "Database Error",
-            JOptionPane.ERROR_MESSAGE
-    );
-            }
-        }
     }
 }
