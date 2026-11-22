@@ -14,7 +14,7 @@ public class DatabaseConnection {
     // Update URL, username, and password to match your Oracle setup
     private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:XE";
     private static final String DB_USER = "system";
-    private static final String DB_PASSWORD = "password";
+    private static final String DB_PASSWORD = "Password";
 
     public record SavedPetSummary(
             int petId,
@@ -103,7 +103,7 @@ public class DatabaseConnection {
             throw new SQLException("Failed to retrieve generated pet_id for " + name);
         }
 
-        String insertStatusSql = "INSERT INTO status (pet_id, hunger, happiness, energy) VALUES (?, 15, 15, 15)";
+        String insertStatusSql = "INSERT INTO status (pet_id, hunger, happiness, energy) VALUES (?, 10, 10, 10)";
         try (PreparedStatement psStatus = conn.prepareStatement(insertStatusSql)) {
             psStatus.setInt(1, petId);
             psStatus.executeUpdate();
@@ -151,14 +151,20 @@ public class DatabaseConnection {
         }
     }
 
-    public static void createActivity(Connection conn, int petId, String activityType) throws SQLException {
+   public static void createActivity(Connection conn, int petId, String activityType) throws SQLException {
+
         String sql = "INSERT INTO activities (pet_id, activity_type) VALUES (?, ?)";
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, petId);
             ps.setString(2, activityType);
             ps.executeUpdate();
-        }
-    }
+            System.out.println("[ACTIVITY SAVED] type = " + activityType);
+
+            }
+
+}
 
     public static void createMessage(Connection conn, int petId, String messageText, String messageType)
             throws SQLException {
