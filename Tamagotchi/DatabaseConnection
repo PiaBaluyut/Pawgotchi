@@ -103,7 +103,7 @@ public class DatabaseConnection {
             throw new SQLException("Failed to retrieve generated pet_id for " + name);
         }
 
-        String insertStatusSql = "INSERT INTO status (pet_id, hunger, happiness, energy) VALUES (?, 10, 10, 10)";
+        String insertStatusSql = "INSERT INTO status (pet_id, hunger, happiness, energy) VALUES (?, 15, 15, 15)";
         try (PreparedStatement psStatus = conn.prepareStatement(insertStatusSql)) {
             psStatus.setInt(1, petId);
             psStatus.executeUpdate();
