@@ -1,1 +1,14 @@
+package com.mycompany.finals;
+
+import java.sql.SQLException;
+
+
+public final class DatabaseCloseExceptionHandler {
+    private DatabaseCloseExceptionHandler() {
+    }
+
+    public static void handle(SQLException ex) {
+        System.err.println("[DB CLOSE ERROR] " + ex.getMessage());
+    }
+}
 
